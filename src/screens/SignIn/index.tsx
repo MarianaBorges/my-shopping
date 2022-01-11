@@ -35,6 +35,27 @@ export function SignIn() {
       });
   }
 
+  function handleSignInWithEmailAndPassword(){
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(({user}) => console.log(user))
+      .catch(error => {
+        console.error(error.code);
+
+        if(error.code === 'user/user-not-found' || error.code === 'auth/wrong-password'){
+          Alert.alert('Usuário não encontrado','Email e/ou senha inválida!');
+        }
+      })
+  }
+
+  function handleForgotPassword(){
+    auth()
+    .sendPasswordResetEmail(email)
+    .then(()=>{
+      Alert.alert('Enviamos um link para o seu email para você redefinir sua senha!');
+    })
+  }
+
   return (
     <Container>
       <Title>MyShopping</Title>
@@ -52,10 +73,10 @@ export function SignIn() {
         onChangeText={setPassword}
       />
 
-      <Button title="Entrar" onPress={handleSignInAnonymously} />
+      <Button title="Entrar" onPress={handleSignInWithEmailAndPassword} />
 
       <Account>
-        <ButtonText title="Recuperar senha" onPress={() => { }} />
+        <ButtonText title="Recuperar senha" onPress={handleForgotPassword} />
         <ButtonText title="Criar minha conta" onPress={handleCreateUserAccount} />
       </Account>
     </Container>
